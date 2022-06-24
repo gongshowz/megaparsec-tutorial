@@ -1,0 +1,76 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           megaparsec-tutorial
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/gongshowz/megaparsec-tutorial#readme>
+homepage:       https://github.com/gongshowz/megaparsec-tutorial#readme
+bug-reports:    https://github.com/gongshowz/megaparsec-tutorial/issues
+author:         gongshowz
+maintainer:     105142707+gongshowz@users.noreply.github.com
+copyright:      Copyright 2022-present, the original author(s)
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/gongshowz/megaparsec-tutorial
+
+library
+  exposed-modules:
+      Tutorial.Indent
+      Tutorial.Lexing
+      Tutorial.Uri
+  other-modules:
+      Paths_megaparsec_tutorial
+  hs-source-dirs:
+      src
+  default-extensions:
+      OverloadedStrings
+      DeriveGeneric
+  build-depends:
+      base >=4.7 && <5
+    , megaparsec >=7.0.4
+    , parser-combinators
+    , text
+  default-language: Haskell2010
+
+executable megaparsec-tutorial-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_megaparsec_tutorial
+  hs-source-dirs:
+      app
+  default-extensions:
+      OverloadedStrings
+      DeriveGeneric
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , megaparsec >=7.0.4
+    , megaparsec-tutorial
+    , text
+  default-language: Haskell2010
+
+test-suite megaparsec-tutorial-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_megaparsec_tutorial
+  hs-source-dirs:
+      test
+  default-extensions:
+      OverloadedStrings
+      DeriveGeneric
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , megaparsec-tutorial
+  default-language: Haskell2010
