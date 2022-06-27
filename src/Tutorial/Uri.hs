@@ -7,6 +7,7 @@ module Tutorial.Uri
 
 import Control.Monad
 
+import Data.Char (isAlphaNum)
 import Data.Text as T
 import Data.Void
 
@@ -50,16 +51,16 @@ pScheme = choice
 
 pUser :: Parser (Text, Text)
 pUser = do
-  user <- T.pack <$> some alphaNumChar <?> "username"
+  user <- takeWhile1P (Just "username") isAlphaNum
   void (char ':')
-  password <- T.pack <$> some alphaNumChar <?> "password"
+  password <- takeWhile1P (Just "password") isAlphaNum
   return (user, password)
 
 pQueryPair :: Parser (Text, Text)
 pQueryPair = do
-  key <- T.pack <$> some alphaNumChar <?> "query key"
+  key <- takeWhile1P (Just "query key") isAlphaNum
   void (char '=')
-  val <- T.pack <$> some alphaNumChar <?> "query value"
+  val <- takeWhile1P (Just "query value") isAlphaNum
   return (key, val)
 
 pQuery :: Parser [(Text, Text)]
@@ -68,19 +69,22 @@ pQuery = some $ do
   optional (char '&')
   return pair
 
+alphaNumOr :: Char -> Char -> Bool
+alphaNumOr a b = a == b || isAlphaNum b
+
 pUri :: Parser Uri
 pUri = do
   scheme <- pScheme <?> "valid scheme"
   void (string "://")
   user <- optional . try $ pUser
   optional (char '@')
-  host <- T.pack <$> some (alphaNumChar <|> char '.')
+  host <- takeWhile1P (Just "host") (alphaNumOr '.')
   port <- optional (char ':' *> label "port number" L.decimal)
   optional (char '/')
-  path <- optional . try $ T.pack <$> some (alphaNumChar <|> char '/')
+  path <- optional . try $ takeWhile1P (Just "path") (alphaNumOr '/')
   optional (char '?')
   query <- optional . try $ pQuery
   optional (char '#')
-  fragment <- optional . try $ T.pack <$> some alphaNumChar
+  fragment <- optional . try $ takeWhile1P (Just "fragment") isAlphaNum
   return $ Uri scheme user host port path query fragment
 

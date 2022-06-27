@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Tutorial.Errors
       Tutorial.Indent
       Tutorial.Lexing
       Tutorial.Uri
