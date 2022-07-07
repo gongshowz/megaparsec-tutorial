@@ -1,27 +1,30 @@
 module Main where
 
-import Text.Megaparsec
+import Text.Megaparsec (parseTest)
 
-import Tutorial.Indent (pItemList, sample)
-import Tutorial.Lexing (pExpr)
+import Tutorial.Indent (pItemList, sampleIL)
+import Tutorial.Lexing (pExpr, sampleExpr)
 import Tutorial.Uri    (pUri)
 
+import qualified Data.Text    as T
 import qualified Data.Text.IO as TIO
+
+separator :: T.Text
+separator =
+  "\n**********************************************************************************************"
 
 main :: IO ()
 main = do
-  putStrLn "*\n*\n*"
+  TIO.putStrLn separator
+  TIO.putStrLn sampleIL
+  parseTest pItemList sampleIL
   --
-  TIO.putStrLn sample
-  parseTest pItemList sample
+  TIO.putStrLn separator
+  TIO.putStrLn sampleExpr
+  parseTest pExpr sampleExpr
   --
-  putStrLn "*\n*\n*"
-  parseTest pExpr "(2 * 3) + 5"
-  --
-  putStrLn "*\n*\n*"
-  putStrLn "https://www.google.com/"
-  parseTest pUri "https://www.google.com/"
+  TIO.putStrLn separator
   putStrLn "\nftp://john:secret@some.host.com:23232"
   parseTest pUri "ftp://john:secret@some.host.com:23232"
-  putStrLn "\nhttp://some.host.com/some/path?a=1&b=2&c=3#faq"
-  parseTest pUri "http://some.host.com/some/path?a=1&b=2&c=3#faq"
+  putStrLn "\nhttps://some.host.com/some/path?a=1&b=2&c=3#faq"
+  parseTest pUri "https://some.host.com/some/path?a=1&b=2&c=3#faq"

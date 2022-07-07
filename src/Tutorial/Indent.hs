@@ -1,6 +1,9 @@
 {-# LANGUAGE TupleSections #-}
 
-module Tutorial.Indent where
+module Tutorial.Indent
+  ( pItemList
+  , sampleIL
+  ) where
 
 import Control.Applicative hiding (some)
 import Control.Monad       (void)
@@ -46,8 +49,8 @@ pItemList = L.nonIndented scn (L.indentBlock scn p) where
     header <- pItem
     return (L.IndentSome Nothing (return . (header, )) pComplexItem)
 
-sample :: T.Text
-sample = T.unlines lines where
+sampleIL :: T.Text
+sampleIL = T.unlines lines where
   lines =
     [ "first-chapter"
     , "  paragraph-one"

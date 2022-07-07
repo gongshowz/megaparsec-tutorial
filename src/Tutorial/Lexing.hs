@@ -1,4 +1,7 @@
-module Tutorial.Lexing where
+module Tutorial.Lexing
+  ( pExpr
+  , sampleExpr
+  ) where
 
 import Control.Monad
 import Control.Monad.Combinators.Expr
@@ -10,13 +13,14 @@ import           Text.Megaparsec
 import           Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 
-
+-- Top level parser type
 type Parser = Parsec Void Text
 
 -- AST for expression parsing
 data Expr
   = Var Text
   | Int Int
+  | Double Double
   | Neg Expr
   | Add Expr Expr
   | Sub Expr Expr
@@ -24,12 +28,20 @@ data Expr
   | Div Expr Expr
   deriving (Eq, Ord, Show)
 
--- Define comment types
+-- Line comment type
+slc :: Parser ()
 slc = L.skipLineComment "--"
+
+-- Block comment type
+sbc :: Parser ()
 sbc = L.skipBlockComment "{-" "-}"
 
--- Quote types
+-- Single quote parser
+singleQuote :: Parser Char
 singleQuote = char '\''
+
+-- Double quote parser
+doubleQuote :: Parser Char
 doubleQuote = char '\"'
 
 -- A parser for whitespace and comments
@@ -59,16 +71,16 @@ pInt :: Parser Int
 pInt = lexeme L.decimal
 
 -- Parse float literals
-pFloat :: Parser Double
-pFloat = lexeme L.float
+pDouble :: Parser Double
+pDouble = lexeme L.float
 
 -- Parse signed integer literals
 pIntSigned :: Parser Int
 pIntSigned = L.signed sc pInt
 
 -- Parse signed float literals
-pFloatSigned :: Parser Double
-pFloatSigned = L.signed sc pFloat
+pDoubleSigned :: Parser Double
+pDoubleSigned = L.signed sc pDouble
 
 -- Parse a keyword
 pKeyword :: Text -> Parser Text
@@ -81,24 +93,28 @@ pVariable = Var . T.pack <$> lexeme
   ((:) <$> letterChar <*> many alphaNumChar <?> "variable")
 
 -- Parse an integer expression
-pInteger :: Parser Expr
-pInteger = Int <$> pInt
+pIntExpr :: Parser Expr
+pIntExpr = Int <$> pInt
+
+-- Parse a floating point expression
+pDoubleExpr :: Parser Expr
+pDoubleExpr = Double <$> pDouble
 
 -- Parse and expression in parens
 parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
+
+-- Parse a float or integer expression
+pNumeric :: Parser Expr
+pNumeric =  try pDoubleExpr <|> pIntExpr
 
 -- Term parser
 pTerm :: Parser Expr
 pTerm = choice
   [ parens pExpr
   , pVariable
-  , pInteger
+  , pNumeric
   ]
-
--- Expression parser
-pExpr :: Parser Expr
-pExpr = makeExprParser pTerm operatorTable
 
 -- Operator table. Ordered in descending precedence, so the higher we place a group of operators
 -- in it, the tighter they bind
@@ -123,3 +139,16 @@ prefix name f = Prefix $ f <$ symbol name
 
 postfix :: Text -> (Expr -> Expr) -> Operator Parser Expr
 postfix name f = Postfix $ f <$ symbol name
+
+-- Expression parser
+pExpr :: Parser Expr
+pExpr = makeExprParser pTerm operatorTable
+
+-- Sample expression to parse
+sampleExpr :: Text
+sampleExpr = T.unlines lines where
+  lines =
+    [ "-1        -- line one"
+    , "* (a + 3) -- line two"
+    , "/ (2 - b) -- line three"
+    ]
