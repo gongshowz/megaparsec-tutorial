@@ -90,10 +90,10 @@ pUri = do
 
 
 getPortOrDefault :: Uri -> Maybe Int
-getPortOrDefault u =
-  if null (uriPort u)
+getPortOrDefault u = let port = uriPort u in
+  if null port
     then defaultPort (uriScheme u)
-    else Nothing
+    else port
 
 defaultPort :: Scheme -> Maybe Int
 defaultPort SchemeHttps = Just 443
