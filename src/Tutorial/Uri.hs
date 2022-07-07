@@ -86,8 +86,10 @@ pUri = do
   query <- optional . try $ pQuery
   optional (char '#')
   fragment <- optional . try $ takeWhile1P (Just "fragment") isAlphaNum
-  return $ Uri scheme user host port path query fragment
+  return $ ensurePort $ Uri scheme user host port path query fragment
 
+ensurePort :: Uri -> Uri
+ensurePort u = let p = getPortOrDefault u in u { uriPort = p }
 
 getPortOrDefault :: Uri -> Maybe Int
 getPortOrDefault u = let port = uriPort u in
