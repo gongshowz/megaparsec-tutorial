@@ -1,16 +1,16 @@
 name:                megaparsec-tutorial
 version:             0.1.0.0
-github:              "gongshowz/megaparsec-tutorial"
+github:              "carp-sushi/megaparsec-tutorial"
 license:             BSD3
-author:              "gongshowz"
-maintainer:          "105142707+gongshowz@users.noreply.github.com"
+author:              "carp-sushi"
+maintainer:          "105142707+carp-sushi@users.noreply.github.com"
 copyright:           "Copyright 2022-present, the original author(s)"
 
 extra-source-files:
 - README.md
 - ChangeLog.md
 
-description: Please see the README on GitHub at <https://github.com/gongshowz/megaparsec-tutorial#readme>
+description: Please see the README on GitHub at <https://github.com/carp-sushi/megaparsec-tutorial#readme>
 
 dependencies:
 - base >= 4.7 && < 5

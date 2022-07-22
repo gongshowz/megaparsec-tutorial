@@ -146,9 +146,8 @@ pExpr = makeExprParser pTerm operatorTable
 
 -- Sample expression to parse
 sampleExpr :: Text
-sampleExpr = T.unlines lines where
-  lines =
-    [ "-1        -- line one"
-    , "* (a + 3) -- line two"
-    , "/ (2 - b) -- line three"
-    ]
+sampleExpr = T.unlines
+  [ "-1        -- line one"
+  , "* (a + 3) -- line two"
+  , "/ (2 - b) -- line three"
+  ]

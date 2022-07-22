@@ -50,14 +50,13 @@ pItemList = L.nonIndented scn (L.indentBlock scn p) where
     return (L.IndentSome Nothing (return . (header, )) pComplexItem)
 
 sampleIL :: T.Text
-sampleIL = T.unlines lines where
-  lines =
-    [ "first-chapter"
-    , "  paragraph-one"
-    , "    note-A # an important note here!"
-    , "    note-B"
-    , "  paragraph-two"
-    , "    note-1"
-    , "    note-2"
-    , "  paragraph-three"
-    ]
+sampleIL = T.unlines
+  [ "first-chapter"
+  , "  paragraph-one"
+  , "    note-A # an important note here!"
+  , "    note-B"
+  , "  paragraph-two"
+  , "    note-1"
+  , "    note-2"
+  , "  paragraph-three"
+  ]
